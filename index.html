@@ -13,8 +13,158 @@
   <!-- Global background ad scripts (popunder/push) -->
   <script async src="https://pl29424738.effectivecpmnetwork.com/e2/09/55/e209559628f16ab5238236071a6e0088.js"></script>
   <script async src="https://www.effectivecpmnetwork.com/zmtzwkjr?key=6820abae25d90a8c1780d98fa0201cd0"></script>
+
+  <style>
+    /* ── STICKY BOTTOM BANNER ── */
+    #sticky-bottom-ad {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      z-index: 9999;
+      background: #0d0d14;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 0;
+      box-shadow: 0 -2px 12px rgba(0,0,0,0.6);
+    }
+    #sticky-close {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      font-size: 12px;
+      cursor: pointer;
+      line-height: 20px;
+      text-align: center;
+    }
+    body { padding-bottom: 66px; }
+
+    /* ── EXIT-INTENT OVERLAY ── */
+    #exit-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: rgba(0,0,0,0.82);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    #exit-overlay.show { display: flex; }
+    #exit-overlay-box {
+      background: #13131f;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 24px 20px 20px;
+      text-align: center;
+      max-width: 340px;
+      width: 90%;
+      position: relative;
+    }
+    #exit-overlay-box p {
+      color: #aaa;
+      font-size: 13px;
+      margin: 0 0 12px;
+    }
+    #exit-close-btn {
+      position: absolute;
+      top: 10px; right: 12px;
+      background: none;
+      border: none;
+      color: #888;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    #exit-close-btn:hover { color: #fff; }
+
+    /* ── DOWNLOAD INTERSTITIAL ── */
+    #dl-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 99998;
+      background: rgba(0,0,0,0.88);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    #dl-overlay.show { display: flex; }
+    #dl-box {
+      background: #13131f;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 28px 20px 20px;
+      text-align: center;
+      max-width: 360px;
+      width: 92%;
+    }
+    #dl-box h3 { color: #fff; margin: 0 0 4px; font-size: 18px; }
+    #dl-box p  { color: #aaa; font-size: 13px; margin: 0 0 14px; }
+    #dl-countdown {
+      font-size: 28px;
+      font-weight: 800;
+      color: #e50914;
+      margin-bottom: 12px;
+    }
+    #dl-go-btn {
+      display: none;
+      background: #e50914;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 32px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 8px;
+    }
+    #dl-go-btn:hover { background: #c40812; }
+  </style>
 </head>
 <body>
+
+  <!-- ── STICKY BOTTOM BANNER ── -->
+  <div id="sticky-bottom-ad">
+    <button id="sticky-close" onclick="document.getElementById('sticky-bottom-ad').style.display='none'">✕</button>
+    <script>atOptions={'key':'53c7cf734ecaad9717bb019ff323c97c','format':'iframe','height':50,'width':320,'params':{}};</script>
+    <script src="https://www.highperformanceformat.com/53c7cf734ecaad9717bb019ff323c97c/invoke.js"></script>
+  </div>
+
+  <!-- ── EXIT-INTENT OVERLAY ── -->
+  <div id="exit-overlay">
+    <div id="exit-overlay-box">
+      <button id="exit-close-btn" onclick="document.getElementById('exit-overlay').classList.remove('show')">✕</button>
+      <p>Before you go — check this out!</p>
+      <script>atOptions={'key':'238a2051f1250c6dfb14686280350c4d','format':'iframe','height':250,'width':300,'params':{}};</script>
+      <script src="https://www.highperformanceformat.com/238a2051f1250c6dfb14686280350c4d/invoke.js"></script>
+    </div>
+  </div>
+
+  <!-- ── DOWNLOAD INTERSTITIAL ── -->
+  <div id="dl-overlay">
+    <div id="dl-box">
+      <h3>⬇ Preparing Download</h3>
+      <p>Your download starts in a moment...</p>
+      <div class="ad-block" style="margin-bottom:12px;">
+        <script>atOptions={'key':'238a2051f1250c6dfb14686280350c4d','format':'iframe','height':250,'width':300,'params':{}};</script>
+        <script src="https://www.highperformanceformat.com/238a2051f1250c6dfb14686280350c4d/invoke.js"></script>
+      </div>
+      <div style="color:#888;font-size:13px;margin-bottom:8px;">
+        Downloading in <span id="dl-sec">5</span>s...
+      </div>
+      <button id="dl-go-btn" onclick="startDownload()">⬇ Download Now</button>
+    </div>
+  </div>
 
   <!-- HEADER -->
   <header class="header">
@@ -34,7 +184,7 @@
     <p>Browse &amp; download your favourite movies</p>
   </div>
 
-  <!-- effectivecpmnetwork native container (once) -->
+  <!-- effectivecpmnetwork native container -->
   <div class="ad-block" style="padding:12px 0;">
     <script async data-cfasync="false" src="https://pl29424739.effectivecpmnetwork.com/3f93cd4234bed8f74d81b381aa309ea4/invoke.js"></script>
     <div id="container-3f93cd4234bed8f74d81b381aa309ea4"></div>
@@ -67,10 +217,34 @@
     <script src="https://www.highperformanceformat.com/238a2051f1250c6dfb14686280350c4d/invoke.js"></script>
   </div>
 
+  <!-- 728x90 leaderboard after grid -->
+  <div class="ad-block" style="padding:10px 0;">
+    <script>atOptions={'key':'bfb74bec0e3ae8c2d4aa4e7098b8801f','format':'iframe','height':90,'width':728,'params':{}};</script>
+    <script src="https://www.highperformanceformat.com/bfb74bec0e3ae8c2d4aa4e7098b8801f/invoke.js"></script>
+  </div>
+
+  <!-- 300x250 second bottom -->
+  <div class="ad-block" style="padding:12px 0;">
+    <script>atOptions={'key':'238a2051f1250c6dfb14686280350c4d','format':'iframe','height':250,'width':300,'params':{}};</script>
+    <script src="https://www.highperformanceformat.com/238a2051f1250c6dfb14686280350c4d/invoke.js"></script>
+  </div>
+
+  <!-- native ad bottom -->
+  <div class="ad-block" style="padding:12px 0;">
+    <script async data-cfasync="false" src="https://pl29424739.effectivecpmnetwork.com/3f93cd4234bed8f74d81b381aa309ea4/invoke.js"></script>
+    <div id="container-3f93cd4234bed8f74d81b381aa309ea4-bottom"></div>
+  </div>
+
   <!-- 320x50 before footer -->
   <div class="ad-block" style="padding:6px 0;">
     <script>atOptions={'key':'53c7cf734ecaad9717bb019ff323c97c','format':'iframe','height':50,'width':320,'params':{}};</script>
     <script src="https://www.highperformanceformat.com/53c7cf734ecaad9717bb019ff323c97c/invoke.js"></script>
+  </div>
+
+  <!-- 728x90 final before footer -->
+  <div class="ad-block" style="padding:8px 0;">
+    <script>atOptions={'key':'bfb74bec0e3ae8c2d4aa4e7098b8801f','format':'iframe','height':90,'width':728,'params':{}};</script>
+    <script src="https://www.highperformanceformat.com/bfb74bec0e3ae8c2d4aa4e7098b8801f/invoke.js"></script>
   </div>
 
   <footer>
@@ -84,7 +258,7 @@
     document.getElementById('movie-count').textContent = '🎬 ' + movies.length + ' Movies';
     document.getElementById('title-count').textContent = movies.length + ' titles';
 
-    // Ad HTML that cycles per row (returns different ad each row)
+    // ── Ad that cycles per row — every row gets a real ad ──
     function rowAd(rowIndex) {
       const type = rowIndex % 4;
       if (type === 0) {
@@ -103,12 +277,17 @@
           <script src="https://www.highperformanceformat.com/53c7cf734ecaad9717bb019ff323c97c/invoke.js"><\/script>
         </div></div>`;
       } else {
-        return `<div class="ad-block-bg"><div class="ad-block" style="min-height:60px;"></div></div>`;
+        return `<div class="ad-block-bg"><div class="ad-block">
+          <script>atOptions={'key':'bfb74bec0e3ae8c2d4aa4e7098b8801f','format':'iframe','height':90,'width':728,'params':{}}<\/script>
+          <script src="https://www.highperformanceformat.com/bfb74bec0e3ae8c2d4aa4e7098b8801f/invoke.js"><\/script>
+        </div></div>`;
       }
     }
 
+    // ── Build movie grid ──
     const grid = document.getElementById('movie-grid');
     let html = '';
+    let _dlTarget = '';
 
     for (let i = 0; i < movies.length; i += 3) {
       const row = movies.slice(i, i + 3);
@@ -116,8 +295,8 @@
       row.forEach(m => {
         const bg = bgColors[(m.id - 1) % bgColors.length];
         html += `
-          <div class="movie-card" onclick="location.href='download.html?id=${m.id}'">
-            <div class="poster-wrap">
+          <div class="movie-card">
+            <div class="poster-wrap" onclick="openDlInterstitial('download.html?id=${m.id}')">
               <img src="${m.poster}" alt="${m.title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" loading="lazy" />
               <div class="poster-fallback" style="background:${bg};display:none;">
                 <div class="poster-letter">${m.title.charAt(0)}</div>
@@ -136,7 +315,7 @@
               </div>
               <div class="movie-genre">${m.genre}</div>
             </div>
-            <a href="download.html?id=${m.id}" class="btn">⬇ Download Movie</a>
+            <a class="btn" onclick="openDlInterstitial('download.html?id=${m.id}');return false;" href="#">⬇ Download Movie</a>
           </div>`;
       });
       html += '</div>';
@@ -145,13 +324,66 @@
 
     grid.innerHTML = html;
 
-    // Re-execute inline scripts added via innerHTML (browsers don't auto-run them)
+    // Re-execute inline scripts added via innerHTML
     grid.querySelectorAll('script').forEach(old => {
       const s = document.createElement('script');
       if (old.src) { s.src = old.src; s.async = true; }
       else { s.text = old.text; }
       document.body.appendChild(s);
     });
+
+    // ── DOWNLOAD INTERSTITIAL — shows ad + 5s countdown before download ──
+    let _dlTimer = null;
+
+    function openDlInterstitial(url) {
+      _dlTarget = url;
+      const overlay = document.getElementById('dl-overlay');
+      const secEl   = document.getElementById('dl-sec');
+      const goBtn   = document.getElementById('dl-go-btn');
+      goBtn.style.display = 'none';
+      secEl.parentElement.style.display = 'block';
+      secEl.textContent = 5;
+      overlay.classList.add('show');
+      let count = 5;
+      clearInterval(_dlTimer);
+      _dlTimer = setInterval(() => {
+        count--;
+        secEl.textContent = count;
+        if (count <= 0) {
+          clearInterval(_dlTimer);
+          secEl.parentElement.style.display = 'none';
+          goBtn.style.display = 'block';
+        }
+      }, 1000);
+    }
+
+    function startDownload() {
+      document.getElementById('dl-overlay').classList.remove('show');
+      location.href = _dlTarget;
+    }
+
+    document.getElementById('dl-overlay').addEventListener('click', function(e) {
+      if (e.target === this) { clearInterval(_dlTimer); this.classList.remove('show'); }
+    });
+
+    // ── EXIT-INTENT OVERLAY — fires once when cursor leaves page top ──
+    let _exitShown = false;
+    document.addEventListener('mouseleave', function(e) {
+      if (e.clientY <= 0 && !_exitShown) {
+        _exitShown = true;
+        document.getElementById('exit-overlay').classList.add('show');
+      }
+    });
+    document.getElementById('exit-overlay').addEventListener('click', function(e) {
+      if (e.target === this) this.classList.remove('show');
+    });
+
+    // ── AUTO-REFRESH — reloads ad iframes every 45 seconds = more impressions ──
+    setInterval(() => {
+      document.querySelectorAll('.ad-block iframe').forEach(iframe => {
+        try { iframe.src = iframe.src; } catch(e) {}
+      });
+    }, 45000);
   </script>
 </body>
 </html>
