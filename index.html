@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nexflix — Movie Collection</title>
+  <meta name="description" content="Nexflix — Browse and download your favourite movies." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Global background ad scripts (popunder/push) -->
+  <script async src="https://pl29424738.effectivecpmnetwork.com/e2/09/55/e209559628f16ab5238236071a6e0088.js"></script>
+  <script async src="https://www.effectivecpmnetwork.com/zmtzwkjr?key=6820abae25d90a8c1780d98fa0201cd0"></script>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <a href="index.html" class="logo">NEXFLIX</a>
+    <span class="header-right" id="movie-count"></span>
+  </header>
+
+  <!-- Ad: 320x50 below header -->
+  <div class="ad-block" style="background:#0d0d14;border-bottom:1px solid rgba(255,255,255,0.05);padding:6px 0;">
+    <script>atOptions={'key':'53c7cf734ecaad9717bb019ff323c97c','format':'iframe','height':50,'width':320,'params':{}};</script>
+    <script src="https://www.highperformanceformat.com/53c7cf734ecaad9717bb019ff323c97c/invoke.js"></script>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <h1>Your Movie <span>Collection</span></h1>
+    <p>Browse &amp; download your favourite movies</p>
+  </div>
+
+  <!-- effectivecpmnetwork native container (once) -->
+  <div class="ad-block" style="padding:12px 0;">
+    <script async data-cfasync="false" src="https://pl29424739.effectivecpmnetwork.com/3f93cd4234bed8f74d81b381aa309ea4/invoke.js"></script>
+    <div id="container-3f93cd4234bed8f74d81b381aa309ea4"></div>
+  </div>
+
+  <!-- 728x90 leaderboard below hero -->
+  <div class="ad-block" style="padding:8px 0;">
+    <script>atOptions={'key':'bfb74bec0e3ae8c2d4aa4e7098b8801f','format':'iframe','height':90,'width':728,'params':{}};</script>
+    <script src="https://www.highperformanceformat.com/bfb74bec0e3ae8c2d4aa4e7098b8801f/invoke.js"></script>
+  </div>
+
+  <!-- 300x250 below hero -->
+  <div class="ad-block" style="padding:8px 0;">
+    <script>atOptions={'key':'238a2051f1250c6dfb14686280350c4d','format':'iframe','height':250,'width':300,'params':{}};</script>
+    <script src="https://www.highperformanceformat.com/238a2051f1250c6dfb14686280350c4d/invoke.js"></script>
+  </div>
+
+  <!-- MAIN: movie grid injected here -->
+  <main class="main">
+    <div class="section-title">
+      <h2>🎬 All Movies</h2>
+      <span id="title-count"></span>
+    </div>
+    <div id="movie-grid"></div>
+  </main>
+
+  <!-- 300x250 after grid -->
+  <div class="ad-block" style="padding:12px 0;">
+    <script>atOptions={'key':'238a2051f1250c6dfb14686280350c4d','format':'iframe','height':250,'width':300,'params':{}};</script>
+    <script src="https://www.highperformanceformat.com/238a2051f1250c6dfb14686280350c4d/invoke.js"></script>
+  </div>
+
+  <!-- 320x50 before footer -->
+  <div class="ad-block" style="padding:6px 0;">
+    <script>atOptions={'key':'53c7cf734ecaad9717bb019ff323c97c','format':'iframe','height':50,'width':320,'params':{}};</script>
+    <script src="https://www.highperformanceformat.com/53c7cf734ecaad9717bb019ff323c97c/invoke.js"></script>
+  </div>
+
+  <footer>
+    <p><span>NEXFLIX</span> — Your Movie Collection</p>
+  </footer>
+
+  <script src="js/movies.js"></script>
+  <script>
+    const bgColors = ["#1a3a6b","#0d2b4a","#1b4f8a","#0a2240","#163460","#0e3060","#1d4580","#0c2850"];
+
+    document.getElementById('movie-count').textContent = '🎬 ' + movies.length + ' Movies';
+    document.getElementById('title-count').textContent = movies.length + ' titles';
+
+    // Ad HTML that cycles per row (returns different ad each row)
+    function rowAd(rowIndex) {
+      const type = rowIndex % 4;
+      if (type === 0) {
+        return `<div class="ad-block-bg"><div class="ad-block">
+          <script>atOptions={'key':'bfb74bec0e3ae8c2d4aa4e7098b8801f','format':'iframe','height':90,'width':728,'params':{}}<\/script>
+          <script src="https://www.highperformanceformat.com/bfb74bec0e3ae8c2d4aa4e7098b8801f/invoke.js"><\/script>
+        </div></div>`;
+      } else if (type === 1) {
+        return `<div class="ad-block-bg"><div class="ad-block">
+          <script>atOptions={'key':'238a2051f1250c6dfb14686280350c4d','format':'iframe','height':250,'width':300,'params':{}}<\/script>
+          <script src="https://www.highperformanceformat.com/238a2051f1250c6dfb14686280350c4d/invoke.js"><\/script>
+        </div></div>`;
+      } else if (type === 2) {
+        return `<div class="ad-block-bg"><div class="ad-block">
+          <script>atOptions={'key':'53c7cf734ecaad9717bb019ff323c97c','format':'iframe','height':50,'width':320,'params':{}}<\/script>
+          <script src="https://www.highperformanceformat.com/53c7cf734ecaad9717bb019ff323c97c/invoke.js"><\/script>
+        </div></div>`;
+      } else {
+        return `<div class="ad-block-bg"><div class="ad-block" style="min-height:60px;"></div></div>`;
+      }
+    }
+
+    const grid = document.getElementById('movie-grid');
+    let html = '';
+
+    for (let i = 0; i < movies.length; i += 3) {
+      const row = movies.slice(i, i + 3);
+      html += '<div class="movie-row">';
+      row.forEach(m => {
+        const bg = bgColors[(m.id - 1) % bgColors.length];
+        html += `
+          <div class="movie-card" onclick="location.href='download.html?id=${m.id}'">
+            <div class="poster-wrap">
+              <img src="${m.poster}" alt="${m.title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" loading="lazy" />
+              <div class="poster-fallback" style="background:${bg};display:none;">
+                <div class="poster-letter">${m.title.charAt(0)}</div>
+                <div class="movie-title-fb">${m.title}</div>
+                <div class="movie-year-fb">${m.year}</div>
+              </div>
+              <div class="hover-overlay">
+                <p>${m.description}</p>
+              </div>
+            </div>
+            <div class="movie-info">
+              <h3>${m.title}</h3>
+              <div class="movie-meta">
+                <span>${m.year}</span>
+                <span class="rating">★ ${m.rating}</span>
+              </div>
+              <div class="movie-genre">${m.genre}</div>
+            </div>
+            <a href="download.html?id=${m.id}" class="btn">⬇ Download Movie</a>
+          </div>`;
+      });
+      html += '</div>';
+      html += rowAd(Math.floor(i / 3));
+    }
+
+    grid.innerHTML = html;
+
+    // Re-execute inline scripts added via innerHTML (browsers don't auto-run them)
+    grid.querySelectorAll('script').forEach(old => {
+      const s = document.createElement('script');
+      if (old.src) { s.src = old.src; s.async = true; }
+      else { s.text = old.text; }
+      document.body.appendChild(s);
+    });
+  </script>
+</body>
+</html>
