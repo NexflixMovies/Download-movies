@@ -15,132 +15,337 @@
   <script async src="https://www.effectivecpmnetwork.com/zmtzwkjr?key=6820abae25d90a8c1780d98fa0201cd0"></script>
 
   <style>
-    /* ── STICKY BOTTOM BANNER ── */
+    /* ═══════════════════════════════════════
+       RESPONSIVE MOVIE GRID
+    ═══════════════════════════════════════ */
+    * { box-sizing: border-box; }
+
+    .movie-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      padding: 0 16px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    @media (max-width: 700px) {
+      .movie-row {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        padding: 0 10px;
+      }
+    }
+
+    .movie-card {
+      display: flex;
+      flex-direction: column;
+      background: #13131f;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.07);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .movie-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.5);
+    }
+
+    /* Fixed 2:3 movie poster ratio — same on ALL screen sizes */
+    .poster-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      overflow: hidden;
+      cursor: pointer;
+      background: #0d0d18;
+    }
+    .poster-wrap img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .poster-fallback {
+      position: absolute;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      text-align: center;
+    }
+    .poster-letter {
+      font-size: clamp(36px, 8vw, 64px);
+      font-weight: 900;
+      color: rgba(255,255,255,0.9);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .movie-title-fb {
+      font-size: clamp(10px, 2vw, 14px);
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+    }
+    .movie-year-fb {
+      font-size: clamp(9px, 1.8vw, 12px);
+      color: rgba(255,255,255,0.6);
+      margin-top: 4px;
+    }
+    .hover-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .poster-wrap:hover .hover-overlay { opacity: 1; }
+    .hover-overlay p {
+      color: #fff;
+      font-size: clamp(10px, 1.8vw, 13px);
+      line-height: 1.5;
+      text-align: center;
+      margin: 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 6;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .movie-info { padding: 10px 10px 4px; flex: 1; }
+    .movie-info h3 {
+      font-size: clamp(11px, 2.2vw, 14px);
+      font-weight: 700;
+      color: #fff;
+      margin: 0 0 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .movie-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: clamp(10px, 1.8vw, 12px);
+      color: #888;
+      margin-bottom: 4px;
+    }
+    .rating { color: #f5c518; font-weight: 600; }
+    .movie-genre {
+      font-size: clamp(9px, 1.6vw, 11px);
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn {
+      display: block;
+      margin: 8px 10px 10px;
+      padding: 9px 6px;
+      background: #e50914;
+      color: #fff;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: clamp(10px, 2vw, 13px);
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      transition: background 0.15s;
+      cursor: pointer;
+    }
+    .btn:hover { background: #c40812; }
+
+    /* ═══════════════════════════════════════
+       AD SEPARATOR — premium look
+    ═══════════════════════════════════════ */
+    .ad-row-wrap {
+      width: 100%;
+      background: linear-gradient(180deg,rgba(13,13,20,0) 0%,rgba(13,13,20,0.95) 20%,rgba(13,13,20,0.95) 80%,rgba(13,13,20,0) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px 12px;
+      margin: 4px 0;
+      position: relative;
+    }
+    .ad-row-wrap::before, .ad-row-wrap::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent);
+    }
+    .ad-row-wrap::before { top: 0; }
+    .ad-row-wrap::after  { bottom: 0; }
+    .ad-label {
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 9px;
+      color: rgba(255,255,255,0.2);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      white-space: nowrap;
+      font-family: Inter, sans-serif;
+    }
+
+    /* Show correct ad size per screen */
+    .ad-desktop { display: block; }
+    .ad-mobile  { display: none; }
+    @media (max-width: 740px) {
+      .ad-desktop { display: none; }
+      .ad-mobile  { display: block; }
+    }
+
+    /* Static ad sections */
+    .ad-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 12px;
+      background: #0d0d14;
+      border-top: 1px solid rgba(255,255,255,0.04);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+
+    /* ═══════════════════════════════════════
+       STICKY BOTTOM BANNER
+    ═══════════════════════════════════════ */
     #sticky-bottom-ad {
       position: fixed;
-      bottom: 0;
-      left: 0;
+      bottom: 0; left: 0;
       width: 100%;
       z-index: 9999;
-      background: #0d0d14;
+      background: #0a0a12;
       border-top: 1px solid rgba(255,255,255,0.1);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 4px 0;
-      box-shadow: 0 -2px 12px rgba(0,0,0,0.6);
+      padding: 5px 0;
+      box-shadow: 0 -3px 20px rgba(0,0,0,0.7);
+      min-height: 62px;
     }
     #sticky-close {
       position: absolute;
-      right: 8px;
-      top: 50%;
+      right: 10px; top: 50%;
       transform: translateY(-50%);
-      background: rgba(255,255,255,0.15);
-      color: #fff;
+      background: rgba(255,255,255,0.12);
+      color: #aaa;
       border: none;
       border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      font-size: 12px;
+      width: 22px; height: 22px;
+      font-size: 11px;
       cursor: pointer;
-      line-height: 20px;
+      line-height: 22px;
       text-align: center;
     }
-    body { padding-bottom: 66px; }
+    body { padding-bottom: 70px; }
 
-    /* ── EXIT-INTENT OVERLAY ── */
+    /* ═══════════════════════════════════════
+       EXIT-INTENT OVERLAY
+    ═══════════════════════════════════════ */
     #exit-overlay {
       display: none;
       position: fixed;
       inset: 0;
       z-index: 99999;
-      background: rgba(0,0,0,0.82);
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(4px);
       align-items: center;
       justify-content: center;
-      flex-direction: column;
     }
     #exit-overlay.show { display: flex; }
     #exit-overlay-box {
       background: #13131f;
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 12px;
-      padding: 24px 20px 20px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      padding: 28px 20px 22px;
       text-align: center;
       max-width: 340px;
-      width: 90%;
+      width: 92%;
       position: relative;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.8);
     }
-    #exit-overlay-box p {
-      color: #aaa;
-      font-size: 13px;
-      margin: 0 0 12px;
-    }
+    #exit-overlay-box p { color: #999; font-size: 12px; margin: 0 0 14px; }
     #exit-close-btn {
       position: absolute;
       top: 10px; right: 12px;
-      background: none;
-      border: none;
-      color: #888;
-      font-size: 20px;
+      background: rgba(255,255,255,0.08);
+      border: none; color: #777;
+      font-size: 16px;
+      width: 28px; height: 28px;
+      border-radius: 50%;
       cursor: pointer;
+      line-height: 28px;
+      text-align: center;
     }
-    #exit-close-btn:hover { color: #fff; }
 
-    /* ── DOWNLOAD INTERSTITIAL ── */
+    /* ═══════════════════════════════════════
+       DOWNLOAD INTERSTITIAL
+    ═══════════════════════════════════════ */
     #dl-overlay {
       display: none;
       position: fixed;
       inset: 0;
       z-index: 99998;
-      background: rgba(0,0,0,0.88);
+      background: rgba(0,0,0,0.9);
+      backdrop-filter: blur(6px);
       align-items: center;
       justify-content: center;
-      flex-direction: column;
     }
     #dl-overlay.show { display: flex; }
     #dl-box {
       background: #13131f;
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 12px;
-      padding: 28px 20px 20px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      padding: 28px 20px 22px;
       text-align: center;
       max-width: 360px;
-      width: 92%;
+      width: 94%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.8);
     }
     #dl-box h3 { color: #fff; margin: 0 0 4px; font-size: 18px; }
-    #dl-box p  { color: #aaa; font-size: 13px; margin: 0 0 14px; }
-    #dl-countdown {
-      font-size: 28px;
-      font-weight: 800;
-      color: #e50914;
-      margin-bottom: 12px;
-    }
+    #dl-box .dl-sub { color: #777; font-size: 12px; margin: 0 0 16px; }
+    #dl-timer-row { color: #666; font-size: 13px; margin: 10px 0 6px; }
     #dl-go-btn {
       display: none;
-      background: #e50914;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 12px 32px;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      width: 100%;
-      margin-top: 8px;
+      background: #e50914; color: #fff;
+      border: none; border-radius: 8px;
+      padding: 13px 32px;
+      font-size: 15px; font-weight: 700;
+      cursor: pointer; width: 100%;
+      margin-top: 10px;
     }
-    #dl-go-btn:hover { background: #c40812; }
+
+    .section-title {
+      display: flex; align-items: center; gap: 10px;
+      max-width: 1200px; margin: 0 auto 16px; padding: 0 16px;
+    }
+    .section-title h2 { font-size: clamp(16px,3vw,22px); font-weight: 800; color: #fff; margin: 0; }
+    .section-title span { font-size: 12px; color: #555; }
+    .main { padding: 24px 0 32px; }
+    @media (max-width: 700px) { .main { padding: 16px 0 24px; } }
   </style>
 </head>
 <body>
 
-  <!-- ── STICKY BOTTOM BANNER ── -->
+  <!-- STICKY BOTTOM BANNER -->
   <div id="sticky-bottom-ad">
     <button id="sticky-close" onclick="document.getElementById('sticky-bottom-ad').style.display='none'">✕</button>
     <script>atOptions={'key':'53c7cf734ecaad9717bb019ff323c97c','format':'iframe','height':50,'width':320,'params':{}};</script>
     <script src="https://www.highperformanceformat.com/53c7cf734ecaad9717bb019ff323c97c/invoke.js"></script>
   </div>
 
-  <!-- ── EXIT-INTENT OVERLAY ── -->
+  <!-- EXIT-INTENT OVERLAY -->
   <div id="exit-overlay">
     <div id="exit-overlay-box">
       <button id="exit-close-btn" onclick="document.getElementById('exit-overlay').classList.remove('show')">✕</button>
@@ -150,18 +355,16 @@
     </div>
   </div>
 
-  <!-- ── DOWNLOAD INTERSTITIAL ── -->
+  <!-- DOWNLOAD INTERSTITIAL -->
   <div id="dl-overlay">
     <div id="dl-box">
       <h3>⬇ Preparing Download</h3>
-      <p>Your download starts in a moment...</p>
-      <div class="ad-block" style="margin-bottom:12px;">
+      <p class="dl-sub">Please wait while we prepare your file...</p>
+      <div style="display:flex;justify-content:center;">
         <script>atOptions={'key':'238a2051f1250c6dfb14686280350c4d','format':'iframe','height':250,'width':300,'params':{}};</script>
         <script src="https://www.highperformanceformat.com/238a2051f1250c6dfb14686280350c4d/invoke.js"></script>
       </div>
-      <div style="color:#888;font-size:13px;margin-bottom:8px;">
-        Downloading in <span id="dl-sec">5</span>s...
-      </div>
+      <div id="dl-timer-row">Download starts in <span id="dl-sec">5</span>s...</div>
       <button id="dl-go-btn" onclick="startDownload()">⬇ Download Now</button>
     </div>
   </div>
@@ -172,37 +375,38 @@
     <span class="header-right" id="movie-count"></span>
   </header>
 
-  <!-- Ad: 320x50 below header -->
-  <div class="ad-block" style="background:#0d0d14;border-bottom:1px solid rgba(255,255,255,0.05);padding:6px 0;">
+  <div class="ad-section">
     <script>atOptions={'key':'53c7cf734ecaad9717bb019ff323c97c','format':'iframe','height':50,'width':320,'params':{}};</script>
     <script src="https://www.highperformanceformat.com/53c7cf734ecaad9717bb019ff323c97c/invoke.js"></script>
   </div>
 
-  <!-- HERO -->
   <div class="hero">
     <h1>Your Movie <span>Collection</span></h1>
     <p>Browse &amp; download your favourite movies</p>
   </div>
 
-  <!-- effectivecpmnetwork native container -->
-  <div class="ad-block" style="padding:12px 0;">
+  <div class="ad-section">
     <script async data-cfasync="false" src="https://pl29424739.effectivecpmnetwork.com/3f93cd4234bed8f74d81b381aa309ea4/invoke.js"></script>
     <div id="container-3f93cd4234bed8f74d81b381aa309ea4"></div>
   </div>
 
-  <!-- 728x90 leaderboard below hero -->
-  <div class="ad-block" style="padding:8px 0;">
-    <script>atOptions={'key':'bfb74bec0e3ae8c2d4aa4e7098b8801f','format':'iframe','height':90,'width':728,'params':{}};</script>
-    <script src="https://www.highperformanceformat.com/bfb74bec0e3ae8c2d4aa4e7098b8801f/invoke.js"></script>
+  <div class="ad-section">
+    <div class="ad-desktop">
+      <script>atOptions={'key':'bfb74bec0e3ae8c2d4aa4e7098b8801f','format':'iframe','height':90,'width':728,'params':{}};</script>
+      <script src="https://www.highperformanceformat.com/bfb74bec0e3ae8c2d4aa4e7098b8801f/invoke.js"></script>
+    </div>
+    <div class="ad-mobile">
+      <script>atOptions={'key':'53c7cf734ecaad9717bb019ff323c97c','format':'iframe','height':50,'width':320,'params':{}};</script>
+      <script src="https://www.highperformanceformat.com/53c7cf734ecaad9717bb019ff323c97c/invoke.js"></script>
+    </div>
   </div>
 
-  <!-- 300x250 below hero -->
-  <div class="ad-block" style="padding:8px 0;">
+  <div class="ad-section">
     <script>atOptions={'key':'238a2051f1250c6dfb14686280350c4d','format':'iframe','height':250,'width':300,'params':{}};</script>
     <script src="https://www.highperformanceformat.com/238a2051f1250c6dfb14686280350c4d/invoke.js"></script>
   </div>
 
-  <!-- MAIN: movie grid injected here -->
+  <!-- MAIN GRID -->
   <main class="main">
     <div class="section-title">
       <h2>🎬 All Movies</h2>
@@ -211,40 +415,42 @@
     <div id="movie-grid"></div>
   </main>
 
-  <!-- 300x250 after grid -->
-  <div class="ad-block" style="padding:12px 0;">
+  <!-- BOTTOM ADS -->
+  <div class="ad-section">
     <script>atOptions={'key':'238a2051f1250c6dfb14686280350c4d','format':'iframe','height':250,'width':300,'params':{}};</script>
     <script src="https://www.highperformanceformat.com/238a2051f1250c6dfb14686280350c4d/invoke.js"></script>
   </div>
-
-  <!-- 728x90 leaderboard after grid -->
-  <div class="ad-block" style="padding:10px 0;">
-    <script>atOptions={'key':'bfb74bec0e3ae8c2d4aa4e7098b8801f','format':'iframe','height':90,'width':728,'params':{}};</script>
-    <script src="https://www.highperformanceformat.com/bfb74bec0e3ae8c2d4aa4e7098b8801f/invoke.js"></script>
+  <div class="ad-section">
+    <div class="ad-desktop">
+      <script>atOptions={'key':'bfb74bec0e3ae8c2d4aa4e7098b8801f','format':'iframe','height':90,'width':728,'params':{}};</script>
+      <script src="https://www.highperformanceformat.com/bfb74bec0e3ae8c2d4aa4e7098b8801f/invoke.js"></script>
+    </div>
+    <div class="ad-mobile">
+      <script>atOptions={'key':'53c7cf734ecaad9717bb019ff323c97c','format':'iframe','height':50,'width':320,'params':{}};</script>
+      <script src="https://www.highperformanceformat.com/53c7cf734ecaad9717bb019ff323c97c/invoke.js"></script>
+    </div>
   </div>
-
-  <!-- 300x250 second bottom -->
-  <div class="ad-block" style="padding:12px 0;">
+  <div class="ad-section">
     <script>atOptions={'key':'238a2051f1250c6dfb14686280350c4d','format':'iframe','height':250,'width':300,'params':{}};</script>
     <script src="https://www.highperformanceformat.com/238a2051f1250c6dfb14686280350c4d/invoke.js"></script>
   </div>
-
-  <!-- native ad bottom -->
-  <div class="ad-block" style="padding:12px 0;">
+  <div class="ad-section">
     <script async data-cfasync="false" src="https://pl29424739.effectivecpmnetwork.com/3f93cd4234bed8f74d81b381aa309ea4/invoke.js"></script>
     <div id="container-3f93cd4234bed8f74d81b381aa309ea4-bottom"></div>
   </div>
-
-  <!-- 320x50 before footer -->
-  <div class="ad-block" style="padding:6px 0;">
+  <div class="ad-section">
     <script>atOptions={'key':'53c7cf734ecaad9717bb019ff323c97c','format':'iframe','height':50,'width':320,'params':{}};</script>
     <script src="https://www.highperformanceformat.com/53c7cf734ecaad9717bb019ff323c97c/invoke.js"></script>
   </div>
-
-  <!-- 728x90 final before footer -->
-  <div class="ad-block" style="padding:8px 0;">
-    <script>atOptions={'key':'bfb74bec0e3ae8c2d4aa4e7098b8801f','format':'iframe','height':90,'width':728,'params':{}};</script>
-    <script src="https://www.highperformanceformat.com/bfb74bec0e3ae8c2d4aa4e7098b8801f/invoke.js"></script>
+  <div class="ad-section">
+    <div class="ad-desktop">
+      <script>atOptions={'key':'bfb74bec0e3ae8c2d4aa4e7098b8801f','format':'iframe','height':90,'width':728,'params':{}};</script>
+      <script src="https://www.highperformanceformat.com/bfb74bec0e3ae8c2d4aa4e7098b8801f/invoke.js"></script>
+    </div>
+    <div class="ad-mobile">
+      <script>atOptions={'key':'238a2051f1250c6dfb14686280350c4d','format':'iframe','height':250,'width':300,'params':{}};</script>
+      <script src="https://www.highperformanceformat.com/238a2051f1250c6dfb14686280350c4d/invoke.js"></script>
+    </div>
   </div>
 
   <footer>
@@ -258,33 +464,36 @@
     document.getElementById('movie-count').textContent = '🎬 ' + movies.length + ' Movies';
     document.getElementById('title-count').textContent = movies.length + ' titles';
 
-    // ── Ad that cycles per row — every row gets a real ad ──
+    // ONE ad per row — smart size per screen
     function rowAd(rowIndex) {
-      const type = rowIndex % 4;
+      const type = rowIndex % 3;
       if (type === 0) {
-        return `<div class="ad-block-bg"><div class="ad-block">
-          <script>atOptions={'key':'bfb74bec0e3ae8c2d4aa4e7098b8801f','format':'iframe','height':90,'width':728,'params':{}}<\/script>
-          <script src="https://www.highperformanceformat.com/bfb74bec0e3ae8c2d4aa4e7098b8801f/invoke.js"><\/script>
-        </div></div>`;
+        return `<div class="ad-row-wrap">
+          <span class="ad-label">Advertisement</span>
+          <div class="ad-desktop">
+            <script>atOptions={'key':'bfb74bec0e3ae8c2d4aa4e7098b8801f','format':'iframe','height':90,'width':728,'params':{}}<\/script>
+            <script src="https://www.highperformanceformat.com/bfb74bec0e3ae8c2d4aa4e7098b8801f/invoke.js"><\/script>
+          </div>
+          <div class="ad-mobile">
+            <script>atOptions={'key':'53c7cf734ecaad9717bb019ff323c97c','format':'iframe','height':50,'width':320,'params':{}}<\/script>
+            <script src="https://www.highperformanceformat.com/53c7cf734ecaad9717bb019ff323c97c/invoke.js"><\/script>
+          </div>
+        </div>`;
       } else if (type === 1) {
-        return `<div class="ad-block-bg"><div class="ad-block">
+        return `<div class="ad-row-wrap">
+          <span class="ad-label">Advertisement</span>
           <script>atOptions={'key':'238a2051f1250c6dfb14686280350c4d','format':'iframe','height':250,'width':300,'params':{}}<\/script>
           <script src="https://www.highperformanceformat.com/238a2051f1250c6dfb14686280350c4d/invoke.js"><\/script>
-        </div></div>`;
-      } else if (type === 2) {
-        return `<div class="ad-block-bg"><div class="ad-block">
+        </div>`;
+      } else {
+        return `<div class="ad-row-wrap">
+          <span class="ad-label">Advertisement</span>
           <script>atOptions={'key':'53c7cf734ecaad9717bb019ff323c97c','format':'iframe','height':50,'width':320,'params':{}}<\/script>
           <script src="https://www.highperformanceformat.com/53c7cf734ecaad9717bb019ff323c97c/invoke.js"><\/script>
-        </div></div>`;
-      } else {
-        return `<div class="ad-block-bg"><div class="ad-block">
-          <script>atOptions={'key':'bfb74bec0e3ae8c2d4aa4e7098b8801f','format':'iframe','height':90,'width':728,'params':{}}<\/script>
-          <script src="https://www.highperformanceformat.com/bfb74bec0e3ae8c2d4aa4e7098b8801f/invoke.js"><\/script>
-        </div></div>`;
+        </div>`;
       }
     }
 
-    // ── Build movie grid ──
     const grid = document.getElementById('movie-grid');
     let html = '';
     let _dlTarget = '';
@@ -297,15 +506,15 @@
         html += `
           <div class="movie-card">
             <div class="poster-wrap" onclick="openDlInterstitial('download.html?id=${m.id}')">
-              <img src="${m.poster}" alt="${m.title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" loading="lazy" />
+              <img src="${m.poster}" alt="${m.title}"
+                onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+                loading="lazy" />
               <div class="poster-fallback" style="background:${bg};display:none;">
                 <div class="poster-letter">${m.title.charAt(0)}</div>
                 <div class="movie-title-fb">${m.title}</div>
                 <div class="movie-year-fb">${m.year}</div>
               </div>
-              <div class="hover-overlay">
-                <p>${m.description}</p>
-              </div>
+              <div class="hover-overlay"><p>${m.description}</p></div>
             </div>
             <div class="movie-info">
               <h3>${m.title}</h3>
@@ -324,7 +533,6 @@
 
     grid.innerHTML = html;
 
-    // Re-execute inline scripts added via innerHTML
     grid.querySelectorAll('script').forEach(old => {
       const s = document.createElement('script');
       if (old.src) { s.src = old.src; s.async = true; }
@@ -332,16 +540,16 @@
       document.body.appendChild(s);
     });
 
-    // ── DOWNLOAD INTERSTITIAL — shows ad + 5s countdown before download ──
+    // DOWNLOAD INTERSTITIAL
     let _dlTimer = null;
-
     function openDlInterstitial(url) {
       _dlTarget = url;
-      const overlay = document.getElementById('dl-overlay');
-      const secEl   = document.getElementById('dl-sec');
-      const goBtn   = document.getElementById('dl-go-btn');
+      const overlay  = document.getElementById('dl-overlay');
+      const secEl    = document.getElementById('dl-sec');
+      const timerRow = document.getElementById('dl-timer-row');
+      const goBtn    = document.getElementById('dl-go-btn');
       goBtn.style.display = 'none';
-      secEl.parentElement.style.display = 'block';
+      timerRow.style.display = 'block';
       secEl.textContent = 5;
       overlay.classList.add('show');
       let count = 5;
@@ -351,22 +559,20 @@
         secEl.textContent = count;
         if (count <= 0) {
           clearInterval(_dlTimer);
-          secEl.parentElement.style.display = 'none';
+          timerRow.style.display = 'none';
           goBtn.style.display = 'block';
         }
       }, 1000);
     }
-
     function startDownload() {
       document.getElementById('dl-overlay').classList.remove('show');
       location.href = _dlTarget;
     }
-
     document.getElementById('dl-overlay').addEventListener('click', function(e) {
       if (e.target === this) { clearInterval(_dlTimer); this.classList.remove('show'); }
     });
 
-    // ── EXIT-INTENT OVERLAY — fires once when cursor leaves page top ──
+    // EXIT-INTENT
     let _exitShown = false;
     document.addEventListener('mouseleave', function(e) {
       if (e.clientY <= 0 && !_exitShown) {
@@ -378,10 +584,10 @@
       if (e.target === this) this.classList.remove('show');
     });
 
-    // ── AUTO-REFRESH — reloads ad iframes every 45 seconds = more impressions ──
+    // AUTO-REFRESH ads every 45s
     setInterval(() => {
-      document.querySelectorAll('.ad-block iframe').forEach(iframe => {
-        try { iframe.src = iframe.src; } catch(e) {}
+      document.querySelectorAll('iframe').forEach(f => {
+        try { f.src = f.src; } catch(e) {}
       });
     }, 45000);
   </script>
